@@ -13,47 +13,42 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.carteira.cliente.domain.model.dto.WalletDTO;
+import br.com.carteira.cliente.domain.model.dto.ProductTypeDTO;
 import br.com.carteira.cliente.exception.RequestBodyInvalidException;
-import br.com.carteira.cliente.request.WalletRequest;
-import br.com.carteira.cliente.service.WalletService;
+import br.com.carteira.cliente.request.ProductTypeRequest;
+import br.com.carteira.cliente.service.ProductTypeService;
 import br.com.carteira.cliente.util.ReponseUtil;
 
 @RestController
-@RequestMapping("wallet")
-public class WalletController {
+@RequestMapping("product-type")
+public class ProductTypeController {
 
 	@Autowired
-	WalletService walletService;
+	ProductTypeService productTypeService;
 
 	@GetMapping("/all")
-	public ResponseEntity<WalletDTO[]> getAll() throws RequestBodyInvalidException {
-		return ReponseUtil.getResponse(walletService.getAll(), WalletDTO[].class);
+	public ResponseEntity<ProductTypeDTO[]> getAll() throws RequestBodyInvalidException {
+		return ReponseUtil.getResponse(productTypeService.getAll(), ProductTypeDTO[].class);
 	}
 	
-	@GetMapping("{id}")
-	public ResponseEntity<WalletDTO> getWallet(@PathVariable Long id) throws RequestBodyInvalidException {
-		return ReponseUtil.getResponse(walletService.getWallet(id), WalletDTO.class);
-	}
-
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public ResponseEntity<WalletDTO> createWallet(@RequestBody WalletRequest walletRequest)
+	public ResponseEntity<ProductTypeDTO> createProductType(@RequestBody ProductTypeRequest productTypeRequest)
 			throws RequestBodyInvalidException {
-		return ReponseUtil.getResponse(walletService.createWallet(walletRequest), WalletDTO.class);
+		return ReponseUtil.getResponse(productTypeService.createProductType(productTypeRequest), ProductTypeDTO.class);
 	}
 
 	@PutMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.ACCEPTED)
-	public ResponseEntity<WalletDTO> updateWallet(@PathVariable Long id, @RequestBody WalletRequest walletRequest)
+	public ResponseEntity<ProductTypeDTO> updateProductType(@PathVariable Long id, @RequestBody ProductTypeRequest productTypeRequest)
 			throws RequestBodyInvalidException {
-		return ReponseUtil.getResponse(walletService.updateWallet(walletRequest, id), WalletDTO.class);
+		return ReponseUtil.getResponse(productTypeService.updateProductType(productTypeRequest, id), ProductTypeDTO.class);
 	}
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.ACCEPTED)
-	public ResponseEntity<String> deleteWallet(@PathVariable Long id) throws RequestBodyInvalidException {
-		walletService.deleteWallet(id);
+	public ResponseEntity<String> deleteProductType(@PathVariable Long id) throws RequestBodyInvalidException {
+		productTypeService.deleteProductType(id);
 		return ResponseEntity.ok("");
 	}
 

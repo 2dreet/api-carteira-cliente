@@ -16,6 +16,7 @@ import br.com.carteira.cliente.constants.RequestExceptionConstants;
 import br.com.carteira.cliente.domain.model.Person;
 import br.com.carteira.cliente.domain.model.User;
 import br.com.carteira.cliente.domain.repository.UserRepository;
+import br.com.carteira.cliente.enums.PersonTypeEnum;
 import br.com.carteira.cliente.exception.RequestBodyInvalidException;
 import br.com.carteira.cliente.request.ForgotPasswordRequest;
 import br.com.carteira.cliente.request.UserChangePasswordRequest;
@@ -36,6 +37,12 @@ public class UserService {
 	@Autowired
 	EmailService emailService;
 
+	public List<User> getAll() {
+		List<User> users = new ArrayList<>();
+		userRepository.findAll().forEach(user -> users.add(user));
+		return users;
+	}
+
 	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public User createUser(UserRequest userRequest) throws RequestBodyInvalidException {
 		if (userRequest == null || StringUtils.isBlank(userRequest.getLogin())
@@ -49,7 +56,7 @@ public class UserService {
 					"Senha deve conter pelo menos 6 digitos");
 		}
 
-		Person person = personService.createPerson(userRequest.getPerson());
+		Person person = personService.createPerson(userRequest.getPerson(), PersonTypeEnum.USER);
 
 		User user = new User();
 		user.setLogin(userRequest.getLogin());
@@ -60,7 +67,8 @@ public class UserService {
 		userRepository.save(user);
 
 		emailService.sendSimpleMessage(person.getEmail(), "Cadastro realizado",
-				"Olá seu cadastro foi realizado com sucesso!");
+				"Olá seu cadastro foi realizado com sucesso! \nlogin: " + userRequest.getLogin() + "\nsenha: "
+						+ userRequest.getPassword());
 
 		return user;
 	}
@@ -122,20 +130,21 @@ public class UserService {
 		}
 
 		user.setPassword(bCryptPasswordEncoder.encode(changePasswordRequest.getNewPassword()));
-		
+
 		emailService.sendSimpleMessage(user.getPerson().getEmail(), "Troca de senha",
-				"Olá a troca da senha foi realizado com sucesso, nova senha é: " + changePasswordRequest.getNewPassword());
+				"Olá a troca da senha foi realizado com sucesso, nova senha é: "
+						+ changePasswordRequest.getNewPassword());
 
 		userRepository.save(user);
 	}
 
 	public void resetPassword(ForgotPasswordRequest forgotPasswordRequest) {
-		
+
 		if (forgotPasswordRequest == null || StringUtils.isBlank(forgotPasswordRequest.getLogin())) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
 					"Não foi enviado o login do usuario na requisição");
 		}
-		
+
 		User user = userRepository.findByLogin(forgotPasswordRequest.getLogin());
 		if (user == null) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Usuario não encontrado");
@@ -146,7 +155,7 @@ public class UserService {
 
 		emailService.sendSimpleMessage(user.getPerson().getEmail(), "Esqueci minha senha",
 				"Olá sua nova senha é: " + password);
-		
+
 		userRepository.save(user);
 	}
 

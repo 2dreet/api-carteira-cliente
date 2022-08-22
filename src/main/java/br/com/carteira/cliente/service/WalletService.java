@@ -1,5 +1,6 @@
 package br.com.carteira.cliente.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +26,26 @@ public class WalletService {
 
 	@Autowired
 	UserService userService;
+
+	public Wallet getWallet(Long id) {
+		if (id == null || id <= 0) {
+			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
+					"Não foi enviado o id da carteira na requisição");
+		}
+
+		Wallet wallet = walletRepository.findById(id).orElse(null);
+		if (wallet == null) {
+			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Carteira não encontrada");
+		}
+
+		return wallet;
+	}
+
+	public List<Wallet> getAll() {
+		List<Wallet> wallets = new ArrayList<>();
+		walletRepository.findAll().forEach(wallet -> wallets.add(wallet));
+		return wallets;
+	}
 
 	public Wallet createWallet(WalletRequest walletRequest) {
 		if (walletRequest == null || StringUtils.isBlank(walletRequest.getName())) {
@@ -88,18 +109,18 @@ public class WalletService {
 
 		return wallet;
 	}
-	
+
 	public void deleteWallet(Long id) {
 		if (id == null || id <= 0) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
 					"Não foi enviado o id da carteira na requisição");
 		}
-		
+
 		Wallet wallet = walletRepository.findById(id).orElse(null);
 		if (wallet == null) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Carteira não encontrada");
 		}
-		
+
 		walletRepository.delete(wallet);
 	}
 }

@@ -13,6 +13,7 @@ import br.com.carteira.cliente.domain.model.Customer;
 import br.com.carteira.cliente.domain.model.Person;
 import br.com.carteira.cliente.domain.repository.CustomerRepository;
 import br.com.carteira.cliente.enums.CustomerStatusEnum;
+import br.com.carteira.cliente.enums.PersonTypeEnum;
 import br.com.carteira.cliente.exception.RequestBodyInvalidException;
 import br.com.carteira.cliente.request.CustomerRequest;
 
@@ -25,6 +26,27 @@ public class CustomerService {
 	@Autowired
 	PersonService personService;
 
+	public List<Customer> getAll() {
+		List<Customer> customers = new ArrayList<>();
+		customerRepository.findAll().forEach(customer -> customers.add(customer));
+		return customers;
+	}
+
+	public Customer getCustomer(Long id) {
+
+		if (id == null || id <= 0) {
+			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
+					"Não foi enviado o id do cliente na requisição");
+		}
+
+		Customer customer = customerRepository.findById(id).orElse(null);
+		if (customer == null) {
+			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Cliente não encontrado");
+		}
+
+		return customer;
+	}
+
 	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public Customer createCustomer(CustomerRequest customerRequest) {
 		if (customerRequest == null || customerRequest.getPerson() == null) {
@@ -32,7 +54,7 @@ public class CustomerService {
 					"Não foi enviado os dados do cliente na requisição");
 		}
 
-		Person person = personService.createPerson(customerRequest.getPerson());
+		Person person = personService.createPerson(customerRequest.getPerson(), PersonTypeEnum.CUSTOMER);
 
 		Customer customer = new Customer();
 		customer.setPerson(person);

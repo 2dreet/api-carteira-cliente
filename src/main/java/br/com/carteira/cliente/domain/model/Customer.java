@@ -2,7 +2,6 @@ package br.com.carteira.cliente.domain.model;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,7 +24,7 @@ public class Customer {
 	
 	String status;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	Person person;
 	
 	@CreationTimestamp

@@ -1,6 +1,5 @@
 package br.com.carteira.cliente.domain.model.dto;
 
-import java.util.Date;
 import java.util.List;
 
 import lombok.Data;
@@ -12,9 +11,11 @@ public class PersonDTO {
 	
 	String name;
 
-	Date birthDate;
+	String birthDate;
 	
 	String type;
+	
+	Boolean status;
 	
 	List<AddressDTO> addresses;
 	

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import br.com.carteira.cliente.constants.RequestExceptionConstants;
 import br.com.carteira.cliente.domain.model.Person;
 import br.com.carteira.cliente.domain.repository.PersonRepository;
+import br.com.carteira.cliente.enums.PersonTypeEnum;
 import br.com.carteira.cliente.exception.RequestBodyInvalidException;
 import br.com.carteira.cliente.request.PersonRequest;
 
@@ -31,8 +32,8 @@ public class PersonService {
 	PersonRepository personRepository;
 
 	@Transactional(rollbackOn = RequestBodyInvalidException.class)
-	public Person createPerson(PersonRequest personRequest) throws RequestBodyInvalidException {
-		if (personRequest == null || StringUtils.isBlank(personRequest.getName()) || personRequest.getType() == null) {
+	public Person createPerson(PersonRequest personRequest, PersonTypeEnum type) throws RequestBodyInvalidException {
+		if (personRequest == null || StringUtils.isBlank(personRequest.getName()) || type == null) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
 					"Não foi enviado os dados da pessoa na requisição");
 		} else if (!validateName(personRequest.getName())) {
@@ -43,7 +44,8 @@ public class PersonService {
 		Person person = new Person();
 		person.setName(personRequest.getName());
 		person.setEmail(personRequest.getEmail());
-		person.setType(personRequest.getType().toString());
+		person.setBirthDate(personRequest.getBirthDate());
+		person.setType(type.toString());
 		person.setStatus(true);
 
 		personRepository.save(person);

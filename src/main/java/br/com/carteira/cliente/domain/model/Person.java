@@ -42,7 +42,7 @@ public class Person {
 	
 	@OneToMany(mappedBy = "person")
 	List<Document> documents;
-
+	
 	@CreationTimestamp
 	Date createAt;
 
