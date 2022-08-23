@@ -75,6 +75,8 @@ public class ProductService {
 		product.setName(productRequest.getName());
 		product.setStatus(true);
 		product.setValue(productRequest.getValue());
+		product.setDescription(productRequest.getDescription());
+		product.setLink(productRequest.getLink());
 		product.setProductType(productType);
 
 		productRepository.save(product);
@@ -107,6 +109,8 @@ public class ProductService {
 
 		product.setName(productRequest.getName());
 		product.setValue(productRequest.getValue());
+		product.setDescription(productRequest.getDescription());
+		product.setLink(productRequest.getLink());
 		product.setProductType(productType);
 
 		productRepository.save(product);

@@ -3,6 +3,7 @@ package br.com.carteira.cliente.domain.model;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,27 +18,21 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Entity
-@Table(name = "products")
+@Table(name = "user_product")
 @Data
-public class Product {
+public class UserProduct {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
-
-	String name;
 	
-	String description;
-	
-	Double value;
-	
-	boolean status;
-	
-	String link;
-
 	@JsonIgnore
-	@ManyToOne
-	ProductType productType;
+	@ManyToOne(fetch = FetchType.LAZY)
+	Product product;
+	
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	User user;
 
 	@CreationTimestamp
 	Date createAt;

@@ -9,7 +9,11 @@ public class ProductDTO {
 
 	String name;
 	
+	String description;
+	
 	Double value;
+	
+	String link;
 	
 	boolean status;
 

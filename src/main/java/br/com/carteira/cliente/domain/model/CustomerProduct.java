@@ -20,7 +20,7 @@ import lombok.Data;
 @Entity
 @Table(name = "person_product")
 @Data
-public class PersonProduct {
+public class CustomerProduct {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +30,8 @@ public class PersonProduct {
 	
 	String paymentStatus;
 	
+	String productStatus;
+	
 	String dueDate;
 	
 	@JsonIgnore
@@ -38,7 +40,11 @@ public class PersonProduct {
 	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-	Person person;
+	Customer customer;
+	
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	User user;
 
 	@CreationTimestamp
 	Date createAt;

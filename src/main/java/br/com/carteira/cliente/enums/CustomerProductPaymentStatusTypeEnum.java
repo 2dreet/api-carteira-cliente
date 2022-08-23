@@ -1,5 +1,5 @@
 package br.com.carteira.cliente.enums;
 
-public enum PersonProductPaymentStatusTypeEnum {
+public enum CustomerProductPaymentStatusTypeEnum {
 	PENDING, PAYD, 
 }
