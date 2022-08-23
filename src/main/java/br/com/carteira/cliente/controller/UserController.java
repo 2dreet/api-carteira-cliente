@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -66,7 +67,13 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body("");
 	}
 
-	@PutMapping("/product")
+	@GetMapping("/{userId}/product")
+	public ResponseEntity<UserProductDTO[]> getUserProducts(@PathVariable Long userId)
+			throws RequestBodyInvalidException {
+		return ReponseUtil.getResponse(userProductService.getUserProducts(userId), UserProductDTO[].class);
+	}
+
+	@PostMapping("/product")
 	public ResponseEntity<UserProductDTO[]> createUserProduct(@RequestBody UserProductRequest userProductRequest)
 			throws RequestBodyInvalidException {
 		return ReponseUtil.getResponse(userProductService.createUserProduct(userProductRequest), UserProductDTO[].class,

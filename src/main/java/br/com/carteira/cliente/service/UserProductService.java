@@ -28,13 +28,39 @@ public class UserProductService {
 	@Autowired
 	ProductRepository productRepository;
 
+	public List<UserProduct> getUserProductsByProductId(Long productId) {
+		if (productId == null || productId <= 0) {
+			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
+					"Não foi enviado os dados para localizar os produtos requisição");
+		}
+
+		List<UserProduct> userProducts = new ArrayList<>();
+
+		userProductRepository.findByProductId(productId).forEach(userProduct -> userProducts.add(userProduct));
+
+		return userProducts;
+	}
+	
+	public List<UserProduct> getUserProducts(Long userId) {
+		if (userId == null || userId <= 0) {
+			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
+					"Não foi enviado os dados para localizar os produtos requisição");
+		}
+
+		List<UserProduct> userProducts = new ArrayList<>();
+
+		userProductRepository.findByUserId(userId).forEach(userProduct -> userProducts.add(userProduct));
+
+		return userProducts;
+	}
+
 	public List<UserProduct> createUserProduct(UserProductRequest userProductRequest) {
 		if (userProductRequest == null || userProductRequest.getUserIds() == null
 				|| userProductRequest.getUserIds().size() == 0 || userProductRequest.getProductId() == null
 				|| userProductRequest.getProductId() <= 0) {
 
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
-					"Não foi enviado os dados do para vincular o produto com o usuário na requisição");
+					"Não foi enviado os dados para vincular o produto com o usuário na requisição");
 		}
 
 		List<UserProduct> userProducts = new ArrayList<>();
@@ -47,16 +73,16 @@ public class UserProductService {
 	private UserProduct attachUserProduct(Long userId, Long productId) {
 		if (userId == null || userId <= 0 || productId == null || productId <= 0) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
-					"Não foi enviado os dados do para vincular o produto com o usuário na requisição");
+					"Não foi enviado os dados para vincular o produto com o usuário na requisição");
 		}
 
 		User user = userRepository.findById(userId).orElse(null);
-		if (user != null) {
+		if (user == null) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Usuáro não encontrado");
 		}
 
-		Product product = productRepository.findById(userId).orElse(null);
-		if (product != null) {
+		Product product = productRepository.findById(productId).orElse(null);
+		if (product == null) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Produto não encontrado");
 		}
 

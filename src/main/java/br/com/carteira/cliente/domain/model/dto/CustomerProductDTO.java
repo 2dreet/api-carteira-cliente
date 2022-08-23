@@ -11,9 +11,9 @@ public class CustomerProductDTO {
 	
 	String paymentStatus;
 	
-	String productStatus;
-	
 	String dueDate;
+	
+	Double value;
 	
 	ProductDTO product;
 	

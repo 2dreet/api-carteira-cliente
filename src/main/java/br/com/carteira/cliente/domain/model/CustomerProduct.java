@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Entity
-@Table(name = "person_product")
+@Table(name = "customer_product")
 @Data
 public class CustomerProduct {
 
@@ -30,9 +30,9 @@ public class CustomerProduct {
 	
 	String paymentStatus;
 	
-	String productStatus;
-	
 	String dueDate;
+	
+	Double value;
 	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
