@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.carteira.cliente.domain.model.dto.ProductTypeDTO;
@@ -26,30 +25,29 @@ public class ProductTypeController {
 	@Autowired
 	ProductTypeService productTypeService;
 
-	@GetMapping("/all")
+	@GetMapping
 	public ResponseEntity<ProductTypeDTO[]> getAll() throws RequestBodyInvalidException {
 		return ReponseUtil.getResponse(productTypeService.getAll(), ProductTypeDTO[].class);
 	}
-	
+
 	@PostMapping
-	@ResponseStatus(code = HttpStatus.CREATED)
 	public ResponseEntity<ProductTypeDTO> createProductType(@RequestBody ProductTypeRequest productTypeRequest)
 			throws RequestBodyInvalidException {
-		return ReponseUtil.getResponse(productTypeService.createProductType(productTypeRequest), ProductTypeDTO.class);
+		return ReponseUtil.getResponse(productTypeService.createProductType(productTypeRequest), ProductTypeDTO.class,
+				HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
-	@ResponseStatus(code = HttpStatus.ACCEPTED)
-	public ResponseEntity<ProductTypeDTO> updateProductType(@PathVariable Long id, @RequestBody ProductTypeRequest productTypeRequest)
-			throws RequestBodyInvalidException {
-		return ReponseUtil.getResponse(productTypeService.updateProductType(productTypeRequest, id), ProductTypeDTO.class);
+	public ResponseEntity<ProductTypeDTO> updateProductType(@PathVariable Long id,
+			@RequestBody ProductTypeRequest productTypeRequest) throws RequestBodyInvalidException {
+		return ReponseUtil.getResponse(productTypeService.updateProductType(productTypeRequest, id),
+				ProductTypeDTO.class, HttpStatus.ACCEPTED);
 	}
 
 	@DeleteMapping("/{id}")
-	@ResponseStatus(code = HttpStatus.ACCEPTED)
 	public ResponseEntity<String> deleteProductType(@PathVariable Long id) throws RequestBodyInvalidException {
 		productTypeService.deleteProductType(id);
-		return ResponseEntity.ok("");
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body("");
 	}
 
 }

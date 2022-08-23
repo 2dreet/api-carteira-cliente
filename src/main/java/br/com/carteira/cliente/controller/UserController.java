@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.carteira.cliente.domain.model.dto.UserDTO;
@@ -37,31 +36,27 @@ public class UserController {
 	}
 
 	@PostMapping
-	@ResponseStatus(code = HttpStatus.CREATED)
 	public ResponseEntity<UserDTO> createUser(@RequestBody UserRequest userRequest) throws RequestBodyInvalidException {
-		return ReponseUtil.getResponse(userService.createUser(userRequest), UserDTO.class);
+		return ReponseUtil.getResponse(userService.createUser(userRequest), UserDTO.class, HttpStatus.CREATED);
 	}
 	
 	@PutMapping
-	@ResponseStatus(code = HttpStatus.ACCEPTED)
 	public ResponseEntity<UserDTO> updateUser(@RequestBody UserRequest userRequest) throws RequestBodyInvalidException {
-		return ReponseUtil.getResponse(userService.updateUser(userRequest), UserDTO.class);
+		return ReponseUtil.getResponse(userService.updateUser(userRequest), UserDTO.class, HttpStatus.ACCEPTED);
 	}
 
 	@PutMapping("change-password")
-	@ResponseStatus(code = HttpStatus.ACCEPTED)
 	public ResponseEntity<String> changePassword(@RequestBody UserChangePasswordRequest changePasswordRequest)
 			throws RequestBodyInvalidException {
 		userService.changePassword(changePasswordRequest);
-		return ResponseEntity.ok("");
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body("");
 	}
 
 	@PutMapping("forgot-password")
-	@ResponseStatus(code = HttpStatus.ACCEPTED)
 	public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest forgotPasswordRequest)
 			throws RequestBodyInvalidException {
 		userService.resetPassword(forgotPasswordRequest);
-		return ResponseEntity.ok("");
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body("");
 	}
 
 }

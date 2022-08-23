@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.carteira.cliente.domain.model.dto.ProductDTO;
@@ -25,7 +24,7 @@ public class ProductController {
 	@Autowired
 	ProductService productService;
 
-	@GetMapping("/all")
+	@GetMapping
 	public ResponseEntity<ProductDTO[]> getAll() throws RequestBodyInvalidException {
 		return ReponseUtil.getResponse(productService.getAll(), ProductDTO[].class);
 	}
@@ -36,27 +35,26 @@ public class ProductController {
 	}
 
 	@PostMapping
-	@ResponseStatus(code = HttpStatus.CREATED)
 	public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductRequest productRequest)
 			throws RequestBodyInvalidException {
-		return ReponseUtil.getResponse(productService.createProduct(productRequest), ProductDTO.class);
+		return ReponseUtil.getResponse(productService.createProduct(productRequest), ProductDTO.class,
+				HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
-	@ResponseStatus(code = HttpStatus.ACCEPTED)
 	public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody ProductRequest productRequest)
 			throws RequestBodyInvalidException {
-		return ReponseUtil.getResponse(productService.updateProduct(productRequest, id), ProductDTO.class);
+		return ReponseUtil.getResponse(productService.updateProduct(productRequest, id), ProductDTO.class,
+				HttpStatus.ACCEPTED);
 	}
 
 	@PutMapping("/{id}/{status}")
-	@ResponseStatus(code = HttpStatus.ACCEPTED)
 	public ResponseEntity<String> updateProductStatus(@PathVariable Long id, @PathVariable Boolean status)
 			throws RequestBodyInvalidException {
 
 		productService.updateProductStatus(id, status);
 
-		return ResponseEntity.ok("");
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body("");
 	}
 
 }
