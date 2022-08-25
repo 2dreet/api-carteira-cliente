@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +44,9 @@ public class CustomerService {
 		if (customer == null) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Cliente não encontrado");
 		}
+		
+		Hibernate.initialize(customer.getResponsible());
+		Hibernate.initialize(customer.getDependents());
 
 		return customer;
 	}
@@ -62,6 +66,18 @@ public class CustomerService {
 
 		customerRepository.save(customer);
 
+		if (customerRequest.getCustomerDependentIds() != null) {
+			for (Long id : customerRequest.getCustomerDependentIds()) {
+				if (id != null && id > 0) {
+					Customer dependente = customerRepository.findById(id).orElse(null);
+					if(dependente != null) {
+						dependente.setResponsible(customer);
+						customerRepository.save(dependente);
+					}
+				}
+			}
+		}
+		
 		return customer;
 	}
 
@@ -75,6 +91,8 @@ public class CustomerService {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
 					"Não foi enviado os dados do cliente na requisição");
 		}
+		
+		customerRepository.removeResponsible(id);
 
 		Customer customer = customerRepository.findById(id).orElse(null);
 		if (customer == null) {
@@ -88,10 +106,23 @@ public class CustomerService {
 		personService.updatePerson(customerRequest.getPerson(), customer.getPerson().getId());
 
 		customerRepository.save(customer);
+		
+		if (customerRequest.getCustomerDependentIds() != null) {
+			for (Long idDependent : customerRequest.getCustomerDependentIds()) {
+				if (idDependent != null && idDependent > 0) {
+					Customer dependente = customerRepository.findById(idDependent).orElse(null);
+					if(dependente != null) {
+						dependente.setResponsible(customer);
+						customerRepository.save(dependente);
+					}
+				}
+			}
+		}
 
 		return customer;
 	}
 
+	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public Customer updateCustomerStatus(CustomerRequest customerRequest, Long id) {
 
 		if (id == null || id <= 0) {

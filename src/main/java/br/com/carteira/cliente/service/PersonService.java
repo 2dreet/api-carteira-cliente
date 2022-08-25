@@ -92,6 +92,7 @@ public class PersonService {
 		return person;
 	}
 
+	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public void updatePersonStatus(Long id, Boolean status) throws RequestBodyInvalidException {
 		if (id == null || id <= 0 || status == null) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,

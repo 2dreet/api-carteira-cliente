@@ -3,6 +3,8 @@ package br.com.carteira.cliente.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,12 +43,30 @@ public class WalletService {
 		return wallet;
 	}
 
+	public List<Wallet> getWalletByUserId(Long userId) {
+		if (userId == null || userId <= 0) {
+			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
+					"Não foi enviado o id do usuário na requisição");
+		}
+
+		return walletRepository.findByUserId(userId);
+	}
+
+	public List<Wallet> getWalletByCustomerId(Long customerId) {
+		if (customerId == null || customerId <= 0) {
+			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
+					"Não foi enviado o id do cliente na requisição");
+		}
+		return walletRepository.findByCustomerId(customerId);
+	}
+	
 	public List<Wallet> getAll() {
 		List<Wallet> wallets = new ArrayList<>();
 		walletRepository.findAll().forEach(wallet -> wallets.add(wallet));
 		return wallets;
 	}
 
+	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public Wallet createWallet(WalletRequest walletRequest) {
 		if (walletRequest == null || StringUtils.isBlank(walletRequest.getName())) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
@@ -75,6 +95,7 @@ public class WalletService {
 		return wallet;
 	}
 
+	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public Wallet updateWallet(WalletRequest walletRequest, Long id) {
 		if (id == null || id <= 0) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
@@ -110,6 +131,7 @@ public class WalletService {
 		return wallet;
 	}
 
+	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public void deleteWallet(Long id) {
 		if (id == null || id <= 0) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,

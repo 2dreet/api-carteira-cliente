@@ -112,6 +112,7 @@ public class UserService {
 		userRepository.save(user);
 	}
 
+	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public void changePassword(UserChangePasswordRequest changePasswordRequest) {
 		if (changePasswordRequest == null || StringUtils.isBlank(changePasswordRequest.getNewPassword())
 				|| StringUtils.isBlank(changePasswordRequest.getOldPassword())) {
@@ -138,6 +139,7 @@ public class UserService {
 		userRepository.save(user);
 	}
 
+	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public void resetPassword(ForgotPasswordRequest forgotPasswordRequest) {
 
 		if (forgotPasswordRequest == null || StringUtils.isBlank(forgotPasswordRequest.getLogin())) {

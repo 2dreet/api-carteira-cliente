@@ -9,6 +9,6 @@ public class UserProductDTO {
 	
 	ProductDTO product;
 	
-	UserDTO user;
+	UserSimpleDTO user;
 
 }

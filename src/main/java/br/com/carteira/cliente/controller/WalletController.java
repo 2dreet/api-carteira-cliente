@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.carteira.cliente.domain.model.dto.WalletDTO;
+import br.com.carteira.cliente.domain.model.dto.WalletSimpleDTO;
 import br.com.carteira.cliente.exception.RequestBodyInvalidException;
 import br.com.carteira.cliente.request.WalletRequest;
 import br.com.carteira.cliente.service.WalletService;
@@ -27,27 +28,37 @@ public class WalletController {
 	WalletService walletService;
 
 	@GetMapping("/all")
-	public ResponseEntity<WalletDTO[]> getAll() throws RequestBodyInvalidException {
-		return ReponseUtil.getResponse(walletService.getAll(), WalletDTO[].class);
+	public ResponseEntity<WalletSimpleDTO[]> getAll() throws RequestBodyInvalidException {
+		return ReponseUtil.getResponse(walletService.getAll(), WalletSimpleDTO[].class);
 	}
 	
 	@GetMapping("{id}")
 	public ResponseEntity<WalletDTO> getWallet(@PathVariable Long id) throws RequestBodyInvalidException {
 		return ReponseUtil.getResponse(walletService.getWallet(id), WalletDTO.class);
 	}
+	
+	@GetMapping("/user/{id}")
+	public ResponseEntity<WalletSimpleDTO[]> getWalletByUserId(@PathVariable Long id) throws RequestBodyInvalidException {
+		return ReponseUtil.getResponse(walletService.getWalletByUserId(id), WalletSimpleDTO[].class);
+	}
+	
+	@GetMapping("/customer/{id}")
+	public ResponseEntity<WalletSimpleDTO[]> getWalletByCustomerId(@PathVariable Long id) throws RequestBodyInvalidException {
+		return ReponseUtil.getResponse(walletService.getWalletByCustomerId(id), WalletSimpleDTO[].class);
+	}
 
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public ResponseEntity<WalletDTO> createWallet(@RequestBody WalletRequest walletRequest)
+	public ResponseEntity<WalletSimpleDTO> createWallet(@RequestBody WalletRequest walletRequest)
 			throws RequestBodyInvalidException {
-		return ReponseUtil.getResponse(walletService.createWallet(walletRequest), WalletDTO.class);
+		return ReponseUtil.getResponse(walletService.createWallet(walletRequest), WalletSimpleDTO.class);
 	}
 
 	@PutMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.ACCEPTED)
-	public ResponseEntity<WalletDTO> updateWallet(@PathVariable Long id, @RequestBody WalletRequest walletRequest)
+	public ResponseEntity<WalletSimpleDTO> updateWallet(@PathVariable Long id, @RequestBody WalletRequest walletRequest)
 			throws RequestBodyInvalidException {
-		return ReponseUtil.getResponse(walletService.updateWallet(walletRequest, id), WalletDTO.class);
+		return ReponseUtil.getResponse(walletService.updateWallet(walletRequest, id), WalletSimpleDTO.class);
 	}
 
 	@DeleteMapping("/{id}")

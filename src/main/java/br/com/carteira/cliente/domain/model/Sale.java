@@ -1,26 +1,26 @@
 package br.com.carteira.cliente.domain.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 
 @Entity
-@Table(name = "customer_product")
+@Table(name = "sales")
 @Data
-public class CustomerProduct {
+public class Sale {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,17 +34,19 @@ public class CustomerProduct {
 	
 	Double value;
 	
-	@JsonIgnore
+	Long quantity;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	Product product;
 	
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	Customer customer;
 	
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	User user;
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+	List<Customer> dependents;
 
 	@CreationTimestamp
 	Date createAt;

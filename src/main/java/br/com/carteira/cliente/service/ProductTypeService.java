@@ -3,6 +3,8 @@ package br.com.carteira.cliente.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ public class ProductTypeService {
 		return productTypes;
 	}
 
+	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public ProductType createProductType(ProductTypeRequest productTypeRequest) {
 		if (productTypeRequest == null || StringUtils.isBlank(productTypeRequest.getName())) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
@@ -47,6 +50,7 @@ public class ProductTypeService {
 		return productType;
 	}
 
+	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public ProductType updateProductType(ProductTypeRequest productTypeRequest, Long id) {
 		if (productTypeRequest == null || StringUtils.isBlank(productTypeRequest.getName()) || id == null || id <= 0) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
@@ -69,6 +73,7 @@ public class ProductTypeService {
 		return productType;
 	}
 
+	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public void deleteProductType(Long id) {
 		if (id == null || id <= 0) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,

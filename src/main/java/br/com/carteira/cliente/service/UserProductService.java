@@ -3,6 +3,8 @@ package br.com.carteira.cliente.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +42,7 @@ public class UserProductService {
 
 		return userProducts;
 	}
-	
+
 	public List<UserProduct> getUserProducts(Long userId) {
 		if (userId == null || userId <= 0) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
@@ -54,6 +56,7 @@ public class UserProductService {
 		return userProducts;
 	}
 
+	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public List<UserProduct> createUserProduct(UserProductRequest userProductRequest) {
 		if (userProductRequest == null || userProductRequest.getUserIds() == null
 				|| userProductRequest.getUserIds().size() == 0 || userProductRequest.getProductId() == null
@@ -70,6 +73,7 @@ public class UserProductService {
 		return userProducts;
 	}
 
+	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	private UserProduct attachUserProduct(Long userId, Long productId) {
 		if (userId == null || userId <= 0 || productId == null || productId <= 0) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
@@ -87,20 +91,18 @@ public class UserProductService {
 		}
 
 		UserProduct userProduct = userProductRepository.findByUserIdAndProductId(userId, productId);
-		if (userProduct != null) {
-			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
-					"Produto já vinculado com o usuário");
+		if (userProduct == null) {
+			userProduct = new UserProduct();
+			userProduct.setProduct(product);
+			userProduct.setUser(user);
+
+			userProductRepository.save(userProduct);
 		}
-
-		userProduct = new UserProduct();
-		userProduct.setProduct(product);
-		userProduct.setUser(user);
-
-		userProductRepository.save(userProduct);
 
 		return userProduct;
 	}
 
+	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public void deleteUserProduct(UserProductRequest userProductRequest) {
 		if (userProductRequest == null || userProductRequest.getUserIds() == null
 				|| userProductRequest.getUserIds().size() == 0 || userProductRequest.getProductId() == null

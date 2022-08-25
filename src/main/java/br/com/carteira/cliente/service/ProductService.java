@@ -3,6 +3,8 @@ package br.com.carteira.cliente.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +56,7 @@ public class ProductService {
 		return productRepository.findByProductTypeId(id);
 	}
 
+	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public Product createProduct(ProductRequest productRequest) {
 		if (productRequest == null || StringUtils.isBlank(productRequest.getName()) 
 				|| productRequest.getValue() == 0 || productRequest.getValue() == null 
@@ -84,6 +87,7 @@ public class ProductService {
 		return product;
 	}
 
+	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public Product updateProduct(ProductRequest productRequest, Long id) {
 		if (productRequest == null || StringUtils.isBlank(productRequest.getName()) 
 				|| productRequest.getValue() == 0 || productRequest.getValue() == null 
@@ -118,6 +122,7 @@ public class ProductService {
 		return product;
 	}
 
+	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public void updateProductStatus(Long id, Boolean status) {
 		if (id == null || id <= 0 || status == null) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,

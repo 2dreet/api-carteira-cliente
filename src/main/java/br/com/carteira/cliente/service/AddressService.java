@@ -3,12 +3,15 @@ package br.com.carteira.cliente.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.carteira.cliente.domain.model.Address;
 import br.com.carteira.cliente.domain.model.Person;
 import br.com.carteira.cliente.domain.repository.AddressRepository;
+import br.com.carteira.cliente.exception.RequestBodyInvalidException;
 import br.com.carteira.cliente.request.AddressRequest;
 
 @Service
@@ -17,6 +20,7 @@ public class AddressService {
 	@Autowired
 	AddressRepository addressRepository;
 
+	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public List<Address> createAddresses(List<AddressRequest> addressRequestList, Person person) {
 		List<Address> addresses = new ArrayList<>();
 
@@ -27,6 +31,7 @@ public class AddressService {
 		return addresses;
 	}
 
+	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	private Address createAddress(AddressRequest addressRequest, Person person) {
 
 		Address address = new Address();

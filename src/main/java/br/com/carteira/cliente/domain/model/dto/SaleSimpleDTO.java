@@ -1,9 +1,11 @@
 package br.com.carteira.cliente.domain.model.dto;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
-public class CustomerProductDTO {
+public class SaleSimpleDTO {
 
 	Long id;
 
@@ -15,9 +17,13 @@ public class CustomerProductDTO {
 	
 	Double value;
 	
+	Long quantity;
+	
 	ProductDTO product;
 	
-	CustomerDTO customer;
+	CustomerSimpleDTO customer;
 	
-	UserDTO user;
+	UserSimpleDTO user;
+	
+	List<CustomerSimpleDTO> customerDependents;
 }

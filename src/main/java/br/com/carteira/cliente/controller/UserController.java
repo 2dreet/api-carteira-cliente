@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.carteira.cliente.domain.model.dto.UserDTO;
 import br.com.carteira.cliente.domain.model.dto.UserProductDTO;
+import br.com.carteira.cliente.domain.model.dto.UserSimpleDTO;
 import br.com.carteira.cliente.exception.RequestBodyInvalidException;
 import br.com.carteira.cliente.request.ForgotPasswordRequest;
 import br.com.carteira.cliente.request.UserChangePasswordRequest;
@@ -34,8 +35,8 @@ public class UserController {
 	UserProductService userProductService;
 
 	@GetMapping("/all")
-	public ResponseEntity<UserDTO[]> getAll() throws RequestBodyInvalidException {
-		return ReponseUtil.getResponse(userService.getAll(), UserDTO[].class);
+	public ResponseEntity<UserSimpleDTO[]> getAll() throws RequestBodyInvalidException {
+		return ReponseUtil.getResponse(userService.getAll(), UserSimpleDTO[].class);
 	}
 
 	@GetMapping
