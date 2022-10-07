@@ -7,6 +7,8 @@ import lombok.Data;
 @Data
 public class PersonRequest {
 
+	Long id;
+	
 	String name;
 	
 	String email;

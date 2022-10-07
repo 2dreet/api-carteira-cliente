@@ -30,6 +30,10 @@ public class UserAuth implements UserDetails {
 	public String getUsername() {
 		return user != null ? user.getLogin() : null;
 	}
+	
+	public String getRule() {
+		return user != null ? user.getRule() : null;
+	}
 
 	@Override
 	public boolean isAccountNonExpired() {

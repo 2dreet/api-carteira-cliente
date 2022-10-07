@@ -6,9 +6,12 @@ import lombok.Data;
 @Data
 public class UserRequest {
 
-	String login, password;
+	Long id;
+	
+	String login;
 	
 	PersonRequest person;
 	
 	UserRuleEnum rule;
+	
 }

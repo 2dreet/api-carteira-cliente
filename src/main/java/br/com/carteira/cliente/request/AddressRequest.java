@@ -5,6 +5,9 @@ import lombok.Data;
 
 @Data
 public class AddressRequest {
+	
+	Long id;
+	
 	String street;
 
 	Long number;

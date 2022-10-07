@@ -1,6 +1,7 @@
 package br.com.carteira.cliente.security.jwt;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +26,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.carteira.cliente.constants.SecurityConstants;
 import br.com.carteira.cliente.request.UserAuthRequest;
+import br.com.carteira.cliente.response.RestError;
 import br.com.carteira.cliente.security.UserAuth;
+import br.com.carteira.cliente.util.ReponseUtil;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -35,8 +40,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	}
 
 	@Override
-	public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res)
-			throws AuthenticationException, BadCredentialsException {
+	public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) {
 		try {
 			UserAuthRequest creds = new ObjectMapper().readValue(req.getInputStream(), UserAuthRequest.class);
 
@@ -44,10 +48,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			return authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(creds.getLogin(), creds.getPassword(), new ArrayList<>()));
 		} catch (Exception e) {
-			SecurityContextHolder.clearContext();
-			this.logger.error(e.getMessage());
-			throw new BadCredentialsException(e.getMessage());
+			
 		}
+		
+		try {
+			ReponseUtil.sendResponseErroAuthenticate(req, res, new RestError(HttpStatus.BAD_REQUEST.value(), "Usuáio ou senha invaládo"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 	
 	@Override
@@ -66,6 +76,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         JSONObject json = new JSONObject();	
         json.put("user", userAuth.getUsername());
         json.put("token", token);
+        json.put("rule", userAuth.getRule());
         
         res.getWriter().write(json.toString());
         res.getWriter().flush();

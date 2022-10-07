@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class StateDTO {
 
-	String nome, sigla;
+	String sigla;
 }

@@ -25,6 +25,9 @@ public class ProductService {
 	
 	@Autowired
 	ProductTypeRepository productTypeRepository;
+	
+	@Autowired
+	UserService userService;
 
 	public List<Product> getAll() {
 		List<Product> products = new ArrayList<>();
@@ -81,6 +84,8 @@ public class ProductService {
 		product.setDescription(productRequest.getDescription());
 		product.setLink(productRequest.getLink());
 		product.setProductType(productType);
+		
+		product.setUser(userService.getUserInContext());
 
 		productRepository.save(product);
 

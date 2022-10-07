@@ -36,6 +36,10 @@ public class ContactService {
 
 		Contact contact = new Contact();
 
+		if(contactRequest.getType() == null) {
+			throw new RequestBodyInvalidException(100, "Tipo do contato é obrigatório");
+		}
+		
 		contact.setNumber(contactRequest.getNumber());
 		contact.setType(contactRequest.getType().toString());
 		contact.setPerson(person);

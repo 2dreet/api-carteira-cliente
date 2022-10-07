@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +19,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
 import br.com.carteira.cliente.constants.SecurityConstants;
+import br.com.carteira.cliente.response.RestError;
+import br.com.carteira.cliente.util.ReponseUtil;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
@@ -39,12 +42,14 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 			UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			chain.doFilter(req, res);
-		} catch (BadCredentialsException e) {
+		} catch (Exception e) {
+			e.printStackTrace();
 			SecurityContextHolder.clearContext();
-			this.logger.error(e.getMessage());
-			onUnsuccessfulAuthentication(req, res, e);
-			chain.doFilter(req, res);
-			return;
+			try {
+				ReponseUtil.sendResponseErroAuthenticate(req, res, new RestError(HttpStatus.FORBIDDEN.value(), "Token não está valído"));
+			} catch (IOException ex) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -61,6 +66,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		throw new BadCredentialsException("Token inválido.");

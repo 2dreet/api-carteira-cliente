@@ -13,6 +13,8 @@ public class PersonDTO {
 
 	String birthDate;
 	
+	String email;
+	
 	String type;
 	
 	Boolean status;

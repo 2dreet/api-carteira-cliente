@@ -75,6 +75,7 @@ public class WalletService {
 
 		Wallet wallet = new Wallet();
 		wallet.setName(walletRequest.getName());
+		wallet.setUser(userService.getUserInContext());
 
 		if (walletRequest.getCustomersIds() != null && walletRequest.getCustomersIds().size() > 0) {
 			List<Customer> customers = customerService.getCustomersByIds(walletRequest.getCustomersIds());

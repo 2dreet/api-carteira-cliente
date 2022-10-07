@@ -26,6 +26,9 @@ public class CustomerService {
 
 	@Autowired
 	PersonService personService;
+	
+	@Autowired
+	UserService userService;
 
 	public List<Customer> getAll() {
 		List<Customer> customers = new ArrayList<>();
@@ -63,6 +66,7 @@ public class CustomerService {
 		Customer customer = new Customer();
 		customer.setPerson(person);
 		customer.setStatus(CustomerStatusEnum.NORMAL.toString());
+		customer.setUser(userService.getUserInContext());
 
 		customerRepository.save(customer);
 

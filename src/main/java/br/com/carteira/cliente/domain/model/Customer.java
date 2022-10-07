@@ -31,6 +31,9 @@ public class Customer {
 	@ManyToOne
 	Person person;
 	
+	@ManyToOne
+	User user;
+	
 	@OneToOne(fetch = FetchType.LAZY)
 	Customer responsible;
 	

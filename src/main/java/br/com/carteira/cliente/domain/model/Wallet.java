@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -36,6 +37,9 @@ public class Wallet {
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
 	List<User> users;
+	
+	@ManyToOne
+	User user;
 
 	@CreationTimestamp
 	Date createAt;

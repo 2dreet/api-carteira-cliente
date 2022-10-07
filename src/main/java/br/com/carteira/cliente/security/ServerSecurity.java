@@ -1,5 +1,9 @@
 package br.com.carteira.cliente.security;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,17 +27,15 @@ public class ServerSecurity {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.csrf().disable();
-		http.cors().and().authorizeRequests().antMatchers(HttpMethod.POST, "/user/auth").permitAll()
+		http.cors().and().
+			 csrf().disable().
+			 authorizeRequests().antMatchers(HttpMethod.POST, "/user/auth").permitAll()
 				.antMatchers(HttpMethod.POST, "/user").permitAll()
 				.antMatchers(HttpMethod.PUT, "/user/forgot-password").permitAll()
 				.anyRequest().authenticated().and()
 				.addFilter(new JwtAuthenticationFilter(authenticationManager))
 				.addFilter(new JwtAuthorizationFilter(authenticationManager)).sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.httpBasic().and().exceptionHandling()
-				.authenticationEntryPoint(new CustomAuthenticationEntryPoint());
-		;
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		
 		return http.build();
 	}
@@ -43,6 +45,14 @@ public class ServerSecurity {
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
 		CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+		
+		List<String> val = new ArrayList<>();
+		val.add("*");
+		
+		corsConfiguration.setAllowedOrigins(val);
+		corsConfiguration.setAllowedMethods(val);
+		corsConfiguration.setAllowedHeaders(val);
+		
 		source.registerCorsConfiguration("/**", corsConfiguration);
 
 		return source;

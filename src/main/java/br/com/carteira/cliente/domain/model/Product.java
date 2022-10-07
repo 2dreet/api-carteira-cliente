@@ -34,6 +34,9 @@ public class Product {
 	boolean status;
 	
 	String link;
+	
+	@ManyToOne
+	User user;
 
 	@JsonIgnore
 	@ManyToOne
