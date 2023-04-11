@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.carteira.cliente.domain.model.dto.ProductDTO;
-import br.com.carteira.cliente.domain.model.dto.UserProductDTO;
 import br.com.carteira.cliente.exception.RequestBodyInvalidException;
 import br.com.carteira.cliente.request.ProductRequest;
 import br.com.carteira.cliente.service.ProductService;
-import br.com.carteira.cliente.service.UserProductService;
 import br.com.carteira.cliente.util.ReponseUtil;
 
 @RestController
@@ -25,9 +23,6 @@ public class ProductController {
 
 	@Autowired
 	ProductService productService;
-	
-	@Autowired
-	UserProductService userProductService;
 
 	@GetMapping
 	public ResponseEntity<ProductDTO[]> getAll() throws RequestBodyInvalidException {
@@ -60,12 +55,6 @@ public class ProductController {
 		productService.updateProductStatus(id, status);
 
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body("");
-	}
-	
-	@GetMapping("/{productId}/user")
-	public ResponseEntity<UserProductDTO[]> getUserProducts(@PathVariable Long productId)
-			throws RequestBodyInvalidException {
-		return ReponseUtil.getResponse(userProductService.getUserProductsByProductId(productId), UserProductDTO[].class);
 	}
 
 }

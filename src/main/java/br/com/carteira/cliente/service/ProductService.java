@@ -85,7 +85,7 @@ public class ProductService {
 		product.setLink(productRequest.getLink());
 		product.setProductType(productType);
 		
-		product.setUser(userService.getUserInContext());
+//		product.setUser(userService.getUserInContext());
 
 		productRepository.save(product);
 

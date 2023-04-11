@@ -16,10 +16,13 @@ import br.com.carteira.cliente.constants.RequestExceptionConstants;
 import br.com.carteira.cliente.constants.SearchContants;
 import br.com.carteira.cliente.domain.model.Person;
 import br.com.carteira.cliente.domain.model.User;
+import br.com.carteira.cliente.domain.model.UserBind;
 import br.com.carteira.cliente.domain.model.dto.UserSimpleDTO;
+import br.com.carteira.cliente.domain.repository.UserBindRepository;
 import br.com.carteira.cliente.domain.repository.UserRepository;
 import br.com.carteira.cliente.enums.PersonTypeEnum;
 import br.com.carteira.cliente.exception.RequestBodyInvalidException;
+import br.com.carteira.cliente.request.BindUserRequest;
 import br.com.carteira.cliente.request.ForgotPasswordRequest;
 import br.com.carteira.cliente.request.UserChangePasswordRequest;
 import br.com.carteira.cliente.request.UserRequest;
@@ -42,25 +45,28 @@ public class UserService {
 	@Autowired
 	EmailService emailService;
 
+	@Autowired
+	UserBindRepository userBindRepository;
+
 	public SearchUserReponse searchDependents(String value, Integer page) {
 		User user = getUserInContext();
-		
+
 		Integer count = userRepository.getCountBySearch(value, user.getId());
 		SearchUserReponse response = SearchUtils.initSearchUserReponse(count, SearchContants.TOTAL_BY_PAGE);
-		
+
 		List<User> users = userRepository.getBySearch(value, user.getId(), SearchContants.TOTAL_BY_PAGE, page);
-		if(users == null) {
+		if (users == null) {
 			users = new ArrayList<>();
 		}
-		
+
 		response.setUsers(ClassUtil.convert(users, UserSimpleDTO[].class));
-		
+
 		return response;
 	}
-	
+
 	public List<User> getAllDependents() {
-		List<User> users = userRepository.findByUserManagerId(getUserInContext().getId());
-		if(users == null) {
+		List<User> users = userRepository.findByUserAdminId(getUserInContext().getId());
+		if (users == null) {
 			users = new ArrayList<>();
 		}
 		return users;
@@ -68,14 +74,13 @@ public class UserService {
 
 	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public User createUser(UserRequest userRequest) throws RequestBodyInvalidException {
-		if (userRequest == null || StringUtils.isBlank(userRequest.getLogin())
-				|| userRequest.getPerson() == null) {
+		if (userRequest == null || StringUtils.isBlank(userRequest.getLogin()) || userRequest.getPerson() == null) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
 					"Não foi enviado os dados do usuário na requisição");
 		} else if (!validateLogin(userRequest.getLogin(), null)) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.USER_NAME_IN_USE, "Usuário já em uso");
-		} 
-		
+		}
+
 		String password = createPassword();
 
 		Person person = personService.createPerson(userRequest.getPerson(), PersonTypeEnum.USER);
@@ -94,36 +99,35 @@ public class UserService {
 
 		return user;
 	}
-	
+
 	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public User createUserDependent(UserRequest userRequest) throws RequestBodyInvalidException {
 		User user = createUser(userRequest);
-		user.setUserManager(getUserInContext());
+//		user.setUserAdmin(getUserInContext());
 		return userRepository.save(user);
 	}
-	
+
 	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public User updateUserDependent(UserRequest userRequest) throws RequestBodyInvalidException {
-		if(userRequest == null || userRequest.getId() == null) {
+		if (userRequest == null || userRequest.getId() == null) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
 					"Não foi enviado os dados do usuário na requisição");
 		}
-		
-		User user = userRepository.findByIdAndUserManagerId(userRequest.getId(), getUserInContext().getId());
-		if(user == null ) {
-			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
-					"Usuário não encontrado.");
+
+		User user = userRepository.findByIdAndUserAdminId(userRequest.getId(), getUserInContext().getId());
+		if (user == null) {
+			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Usuário não encontrado.");
 		}
-		
-		if(!validateLogin(userRequest.getLogin(), userRequest.getId())) {
+
+		if (!validateLogin(userRequest.getLogin(), userRequest.getId())) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.USER_NAME_IN_USE, "Usuário já em uso");
 		}
-		
+
 		personService.updatePerson(userRequest.getPerson(), user.getPerson().getId());
 
 		user.setRule(userRequest.getRule().toString());
 		user.setLogin(userRequest.getLogin());
-		
+
 		return userRepository.save(user);
 	}
 
@@ -147,7 +151,7 @@ public class UserService {
 
 		return user;
 	}
-	
+
 	@Transactional(rollbackOn = RequestBodyInvalidException.class)
 	public void updateUserPersonStatus(Long id, Boolean status) {
 
@@ -223,7 +227,8 @@ public class UserService {
 					"Não foi enviado o login do usuario na requisição");
 		}
 
-		User user = userRepository.findByLoginAndUserManagerId(forgotPasswordRequest.getLogin(), getUserInContext().getId());
+		User user = userRepository.findByLoginAndUserAdminId(forgotPasswordRequest.getLogin(),
+				getUserInContext().getId());
 		if (user == null) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Usuario não encontrado");
 		}
@@ -236,15 +241,19 @@ public class UserService {
 
 		userRepository.save(user);
 	}
-	
+
 	public User getUserInContext() {
 		String login = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userRepository.findByLogin(login);
 		return user;
 	}
-	
+
 	public User getUserById(Long userId) {
-		return userRepository.findById(userId).orElseThrow();
+		User user = userRepository.findByIdAndUserAdminId(userId, getUserInContext().getId());
+		if (user == null) {
+			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Usuario não encontrado");
+		}
+		return user;
 	}
 
 	public List<User> getUsersByIds(List<Long> ids) {
@@ -270,6 +279,41 @@ public class UserService {
 		for (int i = 0; i < 6; i++)
 			sb.append(chars.charAt(rnd.nextInt(chars.length())));
 		return sb.toString();
+	}
+
+	@Transactional(rollbackOn = RequestBodyInvalidException.class)
+	public void bindUserDependent(BindUserRequest userRequest) throws RequestBodyInvalidException {
+		if (userRequest == null || userRequest.getUserId() == null || userRequest.getUserId() <= 0) {
+			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
+					"Não foi enviado os dados nescessários na requisição");
+		}
+		
+		User user = userRepository.findByIdAndUserAdminId(userRequest.getUserId(), getUserInContext().getId());
+		if (user == null) {
+			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Usuario não encontrado");
+		}
+
+		if (userRequest.getUnbindUserIds() != null && userRequest.getUnbindUserIds().size() > 0) {
+			userBindRepository.deleteAllUserBindByDependents(userRequest.getUnbindUserIds());
+		}
+
+		if (userRequest.getBindUserIds() != null && userRequest.getBindUserIds().size() > 0) {
+			for(Long userId : userRequest.getBindUserIds()) {
+				User userDependent = userRepository.findByIdAndUserAdminId(userId, getUserInContext().getId());
+				if (userDependent == null) {
+					throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Usuario não encontrado");
+				}
+				
+				UserBind userBind = userBindRepository.findByDependentIdAndManagerId(userId, userRequest.getUserId());
+				if(userBind == null) {
+					userBind = new UserBind();
+					userBind.setDependent(userDependent);
+					userBind.setManager(user);
+					userBindRepository.save(userBind);
+				}
+			}
+		}
+
 	}
 
 }

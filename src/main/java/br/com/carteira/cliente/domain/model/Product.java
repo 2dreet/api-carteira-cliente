@@ -36,7 +36,7 @@ public class Product {
 	String link;
 	
 	@ManyToOne
-	User user;
+	Company company;
 
 	@JsonIgnore
 	@ManyToOne
