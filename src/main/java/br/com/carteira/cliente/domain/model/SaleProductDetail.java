@@ -1,53 +1,40 @@
 package br.com.carteira.cliente.domain.model;
 
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "users")
-public class User {
-
+@Table(name = "sale_product_details")
+public class SaleProductDetail {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
-
-	@Column(unique = true)
-	String login;
-
-	@JsonIgnore
-	String password;
-
-	String rule;
-
-	@OneToOne
-	Person person;
 	
 	@OneToOne
-	Company company;
+	Product product;
 	
-	@OneToMany(mappedBy = "manager")
-	List<UserBind> dependents;
+	@OneToOne
+	Sale sale;
 	
-	@OneToOne(mappedBy = "dependent")
-	UserBind manager;
-
+	String description;
+	
+	Date startDate;
+	
+	Double value;
+	
 	@CreationTimestamp
 	Date createAt;
 

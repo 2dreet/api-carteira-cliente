@@ -45,7 +45,7 @@ public class AddressService {
 		address.setZipCode(addressRequest.getZipCode());
 		address.setAdjunct(addressRequest.getAdjunct());
 		address.setType(addressRequest.getType().toString());
-		address.setPerson(person);
+//		address.setPerson(person);
 
 		addressRepository.save(address);
 

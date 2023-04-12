@@ -14,11 +14,11 @@ public interface UserRepository extends CrudRepository<User, Long> {
 	
 	List<User> findByIdIn(List<Long> ids);
 	
-	List<User> findByUserAdminId(Long managerId);
+//	List<User> findByUserAdminId(Long managerId);
 	
-	public User findByIdAndUserAdminId(Long userId, Long managerId);
+//	public User findByIdAndUserAdminId(Long userId, Long managerId);
 	
-	public User findByLoginAndUserAdminId(String login, Long managerId);
+//	public User findByLoginAndUserAdminId(String login, Long managerId);
 	
 	@Query(value = UserSearch.sqlResult, nativeQuery = true)
 	public List<User> getBySearch(String value, Long userAdminId, Integer totalByPage, Integer page);

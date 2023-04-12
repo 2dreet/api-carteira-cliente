@@ -46,7 +46,7 @@ public class SaleService {
 
 		List<Sale> sales = new ArrayList<>();
 
-		saleRepository.findByProductId(productId).forEach(sale -> sales.add(sale));
+//		saleRepository.findByProductId(productId).forEach(sale -> sales.add(sale));
 
 		return sales;
 	}
@@ -59,7 +59,7 @@ public class SaleService {
 
 		List<Sale> sales = new ArrayList<>();
 
-		saleRepository.findByCustomerId(customerId).forEach(sale -> sales.add(sale));
+//		saleRepository.findByCustomerId(customerId).forEach(sale -> sales.add(sale));
 
 		return sales;
 	}
@@ -72,7 +72,7 @@ public class SaleService {
 
 		List<Sale> sales = new ArrayList<>();
 
-		saleRepository.findByUserId(userId).forEach(sale -> sales.add(sale));
+//		saleRepository.findByUserId(userId).forEach(sale -> sales.add(sale));
 
 		return sales;
 	}
@@ -97,9 +97,9 @@ public class SaleService {
 		}
 
 		Hibernate.initialize(sale.getCustomer());
-		Hibernate.initialize(sale.getDependents());
-		Hibernate.initialize(sale.getProduct());
-		Hibernate.initialize(sale.getUser());
+//		Hibernate.initialize(sale.getDependents());
+//		Hibernate.initialize(sale.getProduct());
+//		Hibernate.initialize(sale.getUser());
 
 		return sale;
 	}
@@ -139,14 +139,14 @@ public class SaleService {
 
 		Sale sale = new Sale();
 		sale.setCustomer(customer);
-		sale.setProduct(product);
-		sale.setUser(user);
+//		sale.setProduct(product);
+//		sale.setUser(user);
 		sale.setValue(product.getValue());
 		sale.setQuantity(saleRequest.getQuantity());
 		sale.setDueDate(saleRequest.getDueDate());
 		sale.setPaymentStatus(SalePaymentStatusTypeEnum.PENDING.toString());
 		sale.setStatus(SaleStatusTypeEnum.TO_DO.toString());
-		sale.setDependents(dependents);
+//		sale.setDependents(dependents);
 
 		saleRepository.save(sale);
 
@@ -178,7 +178,7 @@ public class SaleService {
 		sale.setPaymentStatus(saleRequest.getPaymentStatus().toString());
 		sale.setStatus(saleRequest.getStatus().toString());
 		sale.setValue(saleRequest.getValue());
-		sale.setDependents(dependents);
+//		sale.setDependents(dependents);
 
 		saleRepository.save(sale);
 

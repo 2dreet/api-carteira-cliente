@@ -64,8 +64,8 @@ public class UserService {
 		return response;
 	}
 
-	public List<User> getAllDependents() {
-		List<User> users = userRepository.findByUserAdminId(getUserInContext().getId());
+	public List<UserBind> getAllDependents() {
+		List<UserBind> users = getUserInContext().getDependents();
 		if (users == null) {
 			users = new ArrayList<>();
 		}
@@ -114,7 +114,8 @@ public class UserService {
 					"Não foi enviado os dados do usuário na requisição");
 		}
 
-		User user = userRepository.findByIdAndUserAdminId(userRequest.getId(), getUserInContext().getId());
+		User user = null;
+//		User user = userRepository.findByIdAndUserAdminId(userRequest.getId(), getUserInContext().getId());
 		if (user == null) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Usuário não encontrado.");
 		}
@@ -227,8 +228,9 @@ public class UserService {
 					"Não foi enviado o login do usuario na requisição");
 		}
 
-		User user = userRepository.findByLoginAndUserAdminId(forgotPasswordRequest.getLogin(),
-				getUserInContext().getId());
+		User user = null;
+//		User user = userRepository.findByLoginAndUserAdminId(forgotPasswordRequest.getLogin(),
+//				getUserInContext().getId());
 		if (user == null) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Usuario não encontrado");
 		}
@@ -249,7 +251,7 @@ public class UserService {
 	}
 
 	public User getUserById(Long userId) {
-		User user = userRepository.findByIdAndUserAdminId(userId, getUserInContext().getId());
+		User user = userRepository.findById(userId).orElse(null);
 		if (user == null) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Usuario não encontrado");
 		}
@@ -288,7 +290,8 @@ public class UserService {
 					"Não foi enviado os dados nescessários na requisição");
 		}
 		
-		User user = userRepository.findByIdAndUserAdminId(userRequest.getUserId(), getUserInContext().getId());
+//		User user = userRepository.findByIdAndUserAdminId(userRequest.getUserId(), getUserInContext().getId());
+		User user = null;
 		if (user == null) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Usuario não encontrado");
 		}
@@ -299,7 +302,8 @@ public class UserService {
 
 		if (userRequest.getBindUserIds() != null && userRequest.getBindUserIds().size() > 0) {
 			for(Long userId : userRequest.getBindUserIds()) {
-				User userDependent = userRepository.findByIdAndUserAdminId(userId, getUserInContext().getId());
+//				User userDependent = userRepository.findByIdAndUserAdminId(userId, getUserInContext().getId());
+				User userDependent = null;
 				if (userDependent == null) {
 					throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Usuario não encontrado");
 				}

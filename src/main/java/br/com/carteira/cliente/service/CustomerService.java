@@ -48,8 +48,8 @@ public class CustomerService {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Cliente não encontrado");
 		}
 		
-		Hibernate.initialize(customer.getResponsible());
-		Hibernate.initialize(customer.getDependents());
+//		Hibernate.initialize(customer.getResponsible());
+//		Hibernate.initialize(customer.getDependents());
 
 		return customer;
 	}
@@ -66,7 +66,7 @@ public class CustomerService {
 		Customer customer = new Customer();
 		customer.setPerson(person);
 		customer.setStatus(CustomerStatusEnum.NORMAL.toString());
-		customer.setUser(userService.getUserInContext());
+//		customer.setUser(userService.getUserInContext());
 
 		customerRepository.save(customer);
 
@@ -75,7 +75,7 @@ public class CustomerService {
 				if (id != null && id > 0) {
 					Customer dependente = customerRepository.findById(id).orElse(null);
 					if(dependente != null) {
-						dependente.setResponsible(customer);
+//						dependente.setResponsible(customer);
 						customerRepository.save(dependente);
 					}
 				}
@@ -116,7 +116,7 @@ public class CustomerService {
 				if (idDependent != null && idDependent > 0) {
 					Customer dependente = customerRepository.findById(idDependent).orElse(null);
 					if(dependente != null) {
-						dependente.setResponsible(customer);
+//						dependente.setResponsible(customer);
 						customerRepository.save(dependente);
 					}
 				}

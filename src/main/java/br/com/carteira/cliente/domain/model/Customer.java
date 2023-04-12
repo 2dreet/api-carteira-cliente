@@ -1,15 +1,11 @@
 package br.com.carteira.cliente.domain.model;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -28,17 +24,11 @@ public class Customer {
 	
 	String status;
 	
-	@ManyToOne
+	@OneToOne
 	Person person;
 	
-	@ManyToOne
-	User user;
-	
-	@OneToOne(fetch = FetchType.LAZY)
-	Customer responsible;
-	
-	@OneToMany(mappedBy = "responsible", fetch = FetchType.LAZY)
-	List<Customer> dependents;
+	@OneToOne
+	Company company;
 	
 	@CreationTimestamp
 	Date createAt;

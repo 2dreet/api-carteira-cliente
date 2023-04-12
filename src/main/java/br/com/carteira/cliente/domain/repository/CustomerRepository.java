@@ -14,7 +14,7 @@ public interface CustomerRepository extends CrudRepository<Customer, Long> {
 
 	List<Customer> findByIdIn(List<Long> ids);
 	
-	List<Customer> findByResponsibleId(Long id);
+//	List<Customer> findByResponsibleId(Long id);
 	
 	@Transactional
 	@Modifying

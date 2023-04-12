@@ -8,7 +8,7 @@ import br.com.carteira.cliente.domain.model.Sale;
 
 public interface SaleRepository extends CrudRepository<Sale, Long> {
 
-	List<Sale> findByCustomerId(Long custormerId);
-	List<Sale> findByProductId(Long productId);
-	List<Sale> findByUserId(Long userId);	
+//	List<Sale> findByCustomerId(Long custormerId);
+//	List<Sale> findByProductId(Long productId);
+//	List<Sale> findByUserId(Long userId);	
 }

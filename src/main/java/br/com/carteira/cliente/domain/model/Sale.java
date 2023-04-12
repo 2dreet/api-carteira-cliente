@@ -4,12 +4,11 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -36,18 +35,18 @@ public class Sale {
 	
 	Long quantity;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	Product product;
+	@OneToMany(mappedBy = "sale")
+	List<SaleProductDetail> productDetails;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne
 	Customer customer;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	User user;
+	@OneToOne
+	Company company;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
-	List<Customer> dependents;
-
+	@OneToOne
+	User seller;
+	
 	@CreationTimestamp
 	Date createAt;
 
