@@ -1,6 +1,7 @@
 package br.com.carteira.cliente.domain.model;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,13 +19,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Entity
-@Table(name = "addresses")
+@Table(name = "address")
 @Data
 public class Address {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Long id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	UUID id;
 
 	String street;
 

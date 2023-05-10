@@ -1,6 +1,6 @@
 package br.com.carteira.cliente.response;
 
-import br.com.carteira.cliente.domain.model.dto.UserSimpleDTO;
+import br.com.carteira.cliente.domain.model.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SearchUserReponse {
 	
-	UserSimpleDTO[] users;
+	UserDTO[] users;
 	Integer total;
 	Integer totalByPage;
 	Integer totalPage;

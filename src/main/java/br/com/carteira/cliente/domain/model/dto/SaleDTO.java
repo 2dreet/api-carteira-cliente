@@ -1,29 +1,29 @@
 package br.com.carteira.cliente.domain.model.dto;
 
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import lombok.Data;
 
 @Data
 public class SaleDTO {
 
-	Long id;
+	UUID id;
 
 	String status;
 	
-	String paymentStatus;
+	Date dueDate;
 	
-	String dueDate;
+	Double sellerCommissionPercentage;
 	
-	Double value;
-	
-	Long quantity;
-	
-	ProductDTO product;
+	List<SaleCourseDTO> saleCourses;
 	
 	CustomerDTO customer;
 	
-	UserDTO user;
+	CompanyDTO company;
 	
-	List<CustomerDTO> customerDependents;
+	UserDTO seller;
+	
+	Date createAt;
 }

@@ -3,7 +3,6 @@ package br.com.carteira.cliente.security;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +30,7 @@ public class ServerSecurity {
 			 csrf().disable().
 			 authorizeRequests().antMatchers(HttpMethod.POST, "/user/auth").permitAll()
 				.antMatchers(HttpMethod.POST, "/user").permitAll()
+				.antMatchers(HttpMethod.POST, "/company").permitAll()
 				.antMatchers(HttpMethod.PUT, "/user/forgot-password").permitAll()
 				.anyRequest().authenticated().and()
 				.addFilter(new JwtAuthenticationFilter(authenticationManager))

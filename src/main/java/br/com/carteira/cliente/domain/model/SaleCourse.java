@@ -1,6 +1,7 @@
 package br.com.carteira.cliente.domain.model;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,15 +17,15 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "sale_product_details")
-public class SaleProductDetail {
+@Table(name = "sale_course")
+public class SaleCourse {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Long id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	UUID id;
 	
 	@OneToOne
-	Product product;
+	Course course;
 	
 	@OneToOne
 	Sale sale;
@@ -34,6 +35,10 @@ public class SaleProductDetail {
 	Date startDate;
 	
 	Double value;
+	
+	Double discount;
+	
+	Integer quantity;
 	
 	@CreationTimestamp
 	Date createAt;

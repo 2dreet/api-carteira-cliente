@@ -2,6 +2,7 @@ package br.com.carteira.cliente.domain.model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,13 +20,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Entity
-@Table(name = "wallets")
+@Table(name = "wallet")
 @Data
 public class Wallet {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Long id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	UUID id;
 
 	String name;
 

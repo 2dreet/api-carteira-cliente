@@ -2,6 +2,7 @@ package br.com.carteira.cliente.domain.model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,12 +22,12 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "users")
+@Table(name = "user")
 public class User {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Long id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	UUID id;
 
 	@Column(unique = true)
 	String login;
@@ -42,11 +43,15 @@ public class User {
 	@OneToOne
 	Company company;
 	
-	@OneToMany(mappedBy = "manager")
-	List<UserBind> dependents;
+	Double commissionPercentage;
 	
-	@OneToOne(mappedBy = "dependent")
-	UserBind manager;
+	String status;
+	
+	@OneToMany(mappedBy = "manager")
+	List<User> dependents;
+	
+	@OneToOne
+	User manager;
 
 	@CreationTimestamp
 	Date createAt;

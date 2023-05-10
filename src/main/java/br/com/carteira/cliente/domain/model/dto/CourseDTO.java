@@ -1,11 +1,13 @@
 package br.com.carteira.cliente.domain.model.dto;
 
+import java.util.UUID;
+
 import lombok.Data;
 
 @Data
-public class ProductDTO {
+public class CourseDTO {
 
-	Long id;
+	UUID id;
 
 	String name;
 	
@@ -13,9 +15,9 @@ public class ProductDTO {
 	
 	Double value;
 	
-	String link;
+	String status;
 	
-	boolean status;
-
-	ProductTypeDTO productType;
+	String courseType;
+	
+	CompanyDTO company;
 }

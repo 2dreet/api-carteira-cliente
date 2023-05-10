@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.carteira.cliente.constants.RequestExceptionConstants;
-import br.com.carteira.cliente.domain.model.Product;
+import br.com.carteira.cliente.domain.model.Course;
 import br.com.carteira.cliente.domain.model.ProductType;
-import br.com.carteira.cliente.domain.repository.ProductRepository;
+import br.com.carteira.cliente.domain.repository.CouseRepository;
 import br.com.carteira.cliente.domain.repository.ProductTypeRepository;
 import br.com.carteira.cliente.exception.RequestBodyInvalidException;
 import br.com.carteira.cliente.request.ProductRequest;
@@ -21,7 +21,7 @@ import br.com.carteira.cliente.request.ProductRequest;
 public class ProductService {
 
 	@Autowired
-	ProductRepository productRepository;
+	CouseRepository productRepository;
 	
 	@Autowired
 	ProductTypeRepository productTypeRepository;
@@ -29,20 +29,20 @@ public class ProductService {
 	@Autowired
 	UserService userService;
 
-	public List<Product> getAll() {
-		List<Product> products = new ArrayList<>();
+	public List<Course> getAll() {
+		List<Course> products = new ArrayList<>();
 		productRepository.findAll().forEach(product -> products.add(product));
 		return products;
 	}
 	
-	public Product getProduct(Long id) {
+	public Course getProduct(Long id) {
 
 		if (id == null || id <= 0) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
 					"Não foi enviado o id do produto na requisição");
 		}
 
-		Product product = productRepository.findById(id).orElse(null);
+		Course product = productRepository.findById(id).orElse(null);
 		if (product == null) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Produto não encontrado");
 		}
@@ -50,7 +50,7 @@ public class ProductService {
 		return product;
 	}
 	
-	public List<Product> getByProductTypeId(Long id) {
+	public List<Course> getByProductTypeId(Long id) {
 		if( id == null || id <= 0) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
 					"Não foi enviado os dados do tipo de produto na requisição");
@@ -60,7 +60,7 @@ public class ProductService {
 	}
 
 	@Transactional(rollbackOn = RequestBodyInvalidException.class)
-	public Product createProduct(ProductRequest productRequest) {
+	public Course createProduct(ProductRequest productRequest) {
 		if (productRequest == null || StringUtils.isBlank(productRequest.getName()) 
 				|| productRequest.getValue() == 0 || productRequest.getValue() == null 
 				|| productRequest.getProductTypeId() == null) {
@@ -77,7 +77,7 @@ public class ProductService {
 					"Tipo de produto não encontrado");
 		}
 		
-		Product product = new Product();
+		Course product = new Course();
 		product.setName(productRequest.getName());
 		product.setStatus(true);
 		product.setValue(productRequest.getValue());
@@ -93,7 +93,7 @@ public class ProductService {
 	}
 
 	@Transactional(rollbackOn = RequestBodyInvalidException.class)
-	public Product updateProduct(ProductRequest productRequest, Long id) {
+	public Course updateProduct(ProductRequest productRequest, Long id) {
 		if (productRequest == null || StringUtils.isBlank(productRequest.getName()) 
 				|| productRequest.getValue() == 0 || productRequest.getValue() == null 
 				|| productRequest.getProductTypeId() == null || id == null || id <= 0) {
@@ -110,7 +110,7 @@ public class ProductService {
 					"Tipo de produto não encontrado");
 		}
 		
-		Product product = productRepository.findById(id).orElse(null);
+		Course product = productRepository.findById(id).orElse(null);
 		if (product == null) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
 					"Produto não encontrado");
@@ -134,7 +134,7 @@ public class ProductService {
 					"Não foi enviado os dados do produto na requisição");
 		}
 		
-		Product product = productRepository.findById(id).orElse(null);
+		Course product = productRepository.findById(id).orElse(null);
 		if (product == null) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
 					"Produto não encontrado");
@@ -146,7 +146,7 @@ public class ProductService {
 	}
 
 	private boolean validateProductName(String name, Long id) {
-		Product product = productRepository.findByName(name);
+		Course product = productRepository.findByName(name);
 		if (product == null || (id != null && product.getId() == id)) {
 			return true;
 		}

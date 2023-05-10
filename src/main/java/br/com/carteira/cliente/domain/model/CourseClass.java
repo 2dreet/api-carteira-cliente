@@ -8,42 +8,46 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Entity
-@Table(name = "sale")
+@Table(name = "course_class")
 @Data
-public class Sale {
+public class CourseClass {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	UUID id;
 
+	String name;
+	
+	String description;
+	
 	String status;
 	
-	Date dueDate;
+	String link;
 	
-	Double sellerCommissionPercentage;
-	
-	@OneToMany(mappedBy = "sale")
-	List<SaleCourse> saleCourses;
+	Date startDate;
 	
 	@OneToOne
-	Customer customer;
+	Course course;
+	
+	@JsonIgnore
+	@ManyToMany
+	List<Customer> customers;
 	
 	@OneToOne
-	Company company;
-	
-	@OneToOne
-	User seller;
-	
+	User user;
+
 	@CreationTimestamp
 	Date createAt;
 

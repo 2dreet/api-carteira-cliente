@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.carteira.cliente.constants.RequestExceptionConstants;
-import br.com.carteira.cliente.domain.model.Product;
+import br.com.carteira.cliente.domain.model.Course;
 import br.com.carteira.cliente.domain.model.ProductType;
-import br.com.carteira.cliente.domain.repository.ProductRepository;
+import br.com.carteira.cliente.domain.repository.CouseRepository;
 import br.com.carteira.cliente.domain.repository.ProductTypeRepository;
 import br.com.carteira.cliente.exception.RequestBodyInvalidException;
 import br.com.carteira.cliente.request.ProductTypeRequest;
@@ -24,7 +24,7 @@ public class ProductTypeService {
 	ProductTypeRepository productTypeRepository;
 
 	@Autowired
-	ProductRepository productRepository;
+	CouseRepository productRepository;
 
 	public List<ProductType> getAll() {
 		List<ProductType> productTypes = new ArrayList<>();
@@ -86,7 +86,7 @@ public class ProductTypeService {
 					"Tipo de produto não encontrado");
 		}
 		
-		List<Product> products = productRepository.findByProductTypeId(id);
+		List<Course> products = productRepository.findByProductTypeId(id);
 		if(products != null && products.size() > 0 ) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID,
 					"Não é possível deletar o tipo do produto, pois, existem produtos cadastros com esse tipo");

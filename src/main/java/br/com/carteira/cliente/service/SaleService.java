@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 
 import br.com.carteira.cliente.constants.RequestExceptionConstants;
 import br.com.carteira.cliente.domain.model.Customer;
-import br.com.carteira.cliente.domain.model.Product;
+import br.com.carteira.cliente.domain.model.Course;
 import br.com.carteira.cliente.domain.model.Sale;
 import br.com.carteira.cliente.domain.model.User;
 import br.com.carteira.cliente.domain.repository.CustomerRepository;
-import br.com.carteira.cliente.domain.repository.ProductRepository;
+import br.com.carteira.cliente.domain.repository.CouseRepository;
 import br.com.carteira.cliente.domain.repository.SaleRepository;
 import br.com.carteira.cliente.domain.repository.UserRepository;
 import br.com.carteira.cliente.enums.SalePaymentStatusTypeEnum;
@@ -33,7 +33,7 @@ public class SaleService {
 	UserRepository userRepository;
 
 	@Autowired
-	ProductRepository productRepository;
+	CouseRepository productRepository;
 
 	@Autowired
 	CustomerRepository customerRepository;
@@ -119,7 +119,7 @@ public class SaleService {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Usuáro não encontrado");
 		}
 
-		Product product = productRepository.findById(saleRequest.getProductId()).orElse(null);
+		Course product = productRepository.findById(saleRequest.getProductId()).orElse(null);
 		if (product == null) {
 			throw new RequestBodyInvalidException(RequestExceptionConstants.REQUEST_INVALID, "Produto não encontrado");
 		}

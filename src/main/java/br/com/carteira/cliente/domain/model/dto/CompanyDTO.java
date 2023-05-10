@@ -1,18 +1,17 @@
 package br.com.carteira.cliente.domain.model.dto;
 
+import java.util.UUID;
+
 import lombok.Data;
 
 @Data
-public class PersonSimpleDTO {
+public class CompanyDTO {
 
-	Long id;
+	UUID id;
 	
 	String name;
-
-	String birthDate;
 	
-	String type;
+	String cnpj;
 	
-	Boolean status;
-	
+	String representativeCpf;
 }

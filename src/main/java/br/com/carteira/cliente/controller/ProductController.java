@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.carteira.cliente.domain.model.dto.ProductDTO;
+import br.com.carteira.cliente.domain.model.dto.CourseDTO;
 import br.com.carteira.cliente.exception.RequestBodyInvalidException;
 import br.com.carteira.cliente.request.ProductRequest;
 import br.com.carteira.cliente.service.ProductService;
@@ -25,26 +25,26 @@ public class ProductController {
 	ProductService productService;
 
 	@GetMapping
-	public ResponseEntity<ProductDTO[]> getAll() throws RequestBodyInvalidException {
-		return ReponseUtil.getResponse(productService.getAll(), ProductDTO[].class);
+	public ResponseEntity<CourseDTO[]> getAll() throws RequestBodyInvalidException {
+		return ReponseUtil.getResponse(productService.getAll(), CourseDTO[].class);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ProductDTO> getProduct(@PathVariable Long id) throws RequestBodyInvalidException {
-		return ReponseUtil.getResponse(productService.getProduct(id), ProductDTO.class);
+	public ResponseEntity<CourseDTO> getProduct(@PathVariable Long id) throws RequestBodyInvalidException {
+		return ReponseUtil.getResponse(productService.getProduct(id), CourseDTO.class);
 	}
 
 	@PostMapping
-	public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductRequest productRequest)
+	public ResponseEntity<CourseDTO> createProduct(@RequestBody ProductRequest productRequest)
 			throws RequestBodyInvalidException {
-		return ReponseUtil.getResponse(productService.createProduct(productRequest), ProductDTO.class,
+		return ReponseUtil.getResponse(productService.createProduct(productRequest), CourseDTO.class,
 				HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody ProductRequest productRequest)
+	public ResponseEntity<CourseDTO> updateProduct(@PathVariable Long id, @RequestBody ProductRequest productRequest)
 			throws RequestBodyInvalidException {
-		return ReponseUtil.getResponse(productService.updateProduct(productRequest, id), ProductDTO.class,
+		return ReponseUtil.getResponse(productService.updateProduct(productRequest, id), CourseDTO.class,
 				HttpStatus.ACCEPTED);
 	}
 

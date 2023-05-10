@@ -1,4 +1,4 @@
-package br.com.carteira.cliente.domain.model.search;
+package br.com.carteira.cliente.domain.repository.search;
 
 public class UserSearch {
 

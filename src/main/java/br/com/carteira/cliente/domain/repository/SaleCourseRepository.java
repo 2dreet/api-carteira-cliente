@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import org.springframework.data.repository.CrudRepository;
 
-import br.com.carteira.cliente.domain.model.Address;
+import br.com.carteira.cliente.domain.model.SaleCourse;
 
-public interface AddressRepository extends CrudRepository<Address, UUID> {
+public interface SaleCourseRepository extends CrudRepository<SaleCourse, UUID> {
 
 }

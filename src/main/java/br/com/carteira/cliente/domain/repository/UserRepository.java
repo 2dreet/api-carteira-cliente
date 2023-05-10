@@ -1,18 +1,19 @@
 package br.com.carteira.cliente.domain.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import br.com.carteira.cliente.domain.model.User;
-import br.com.carteira.cliente.domain.model.search.UserSearch;
+import br.com.carteira.cliente.domain.repository.search.UserSearch;
 
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, UUID> {
 	
 	public User findByLogin(String login); 
 	
-	List<User> findByIdIn(List<Long> ids);
+//	List<User> findByIdIn(List<Long> ids);
 	
 //	List<User> findByUserAdminId(Long managerId);
 	

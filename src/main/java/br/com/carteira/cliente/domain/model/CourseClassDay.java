@@ -1,6 +1,7 @@
 package br.com.carteira.cliente.domain.model;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,30 +16,23 @@ import org.hibernate.annotations.UpdateTimestamp;
 import lombok.Data;
 
 @Entity
-@Table(name = "products")
+@Table(name = "course_class_day")
 @Data
-public class Product {
+public class CourseClassDay {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Long id;
-
-	String name;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	UUID id;
 	
 	String description;
 	
-	Double value;
+	String status;
 	
-	boolean status;
-	
-	String link;
+	Date startDate;
 	
 	@OneToOne
-	Company company;
-
-	@OneToOne
-	ProductType productType;
-
+	CourseClass courseClass;
+	
 	@CreationTimestamp
 	Date createAt;
 

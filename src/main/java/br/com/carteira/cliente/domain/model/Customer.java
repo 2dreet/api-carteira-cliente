@@ -1,6 +1,7 @@
 package br.com.carteira.cliente.domain.model;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,11 +17,12 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "customers")
+@Table(name = "customer")
 public class Customer {
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Long id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	UUID id;
 	
 	String status;
 	

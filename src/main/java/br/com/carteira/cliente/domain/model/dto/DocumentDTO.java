@@ -1,11 +1,13 @@
 package br.com.carteira.cliente.domain.model.dto;
 
+import java.util.UUID;
+
 import lombok.Data;
 
 @Data
 public class DocumentDTO {
 
-	Long id;
+	UUID id;
 	
 	String number;
 	

@@ -1,13 +1,11 @@
 package br.com.carteira.cliente.domain.repository;
 
-import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.repository.CrudRepository;
 
 import br.com.carteira.cliente.domain.model.Person;
 
-public interface PersonRepository extends CrudRepository<Person, Long> {
+public interface PersonRepository extends CrudRepository<Person, UUID> {
 
-	List<Person> findByIdIn(List<Long> ids);
-	
 }
